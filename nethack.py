@@ -38,9 +38,9 @@ class Room:
     """
     def __init__(self, world):
         self.xleft = randint(0, world.xsize - 3)
-        self.xright = randint(self.xleft + 1, self.xleft + 6)
+        self.xright = randint(self.xleft + 3, self.xleft + 6)
         self.ybottom = randint(5, world.ysize)
-        self.ytop = randint(self.ybottom - 5, self.ybottom - 3)
+        self.ytop = randint(self.ybottom - 6, self.ybottom - 3)
 
     def __str__(self):
         return str(self.xleft) + " " + str(self.xright) +" "+ str(self.ytop) +" "+ str(self.ybottom)
@@ -50,6 +50,7 @@ class coridoor:
     defines the coridoors
     """
     def __init__(self, room1, room2, plateau):
+        if room1.xleft > room2.xleft: room1, room2 = room2, room1
         print(room1)
         print(room2)
         self.start = (room1.xleft + randint(0,room1.xright - room1.xleft),
@@ -63,11 +64,15 @@ class coridoor:
         self.xlength = finalcoord[2] - finalcoord[0]
         self.ylength = finalcoord[3] - finalcoord[1]
         print(finalcoord)
+        #finalcoord = [Xstart, Ystart, Xend, Yend]
         for absc in range(finalcoord[0], finalcoord[2]):
             try:plateau[finalcoord[1]][absc] = 1
             except:pass
-        for ordo in range(finalcoord[3] - finalcoord[1]):
-            try:plateau[ordo][finalcoord[2]] = 1
+        abcs = finalcoord[2]
+        if room1.ytop > room2.ytop:
+            abcs = finalcoord[0]
+        for ordo in range(finalcoord[1], finalcoord[3]):
+            try:plateau[ordo][abcs] = 1
             except:pass
 
 
@@ -75,9 +80,9 @@ def main(stdscr):
     """
     Main of program
     """
-    world = World(20,20)
+    world = World(80,23)
     rooms, coridoors = [], []
-    for _i_ in range(2):
+    for _i_ in range(5):
         room = Room(world)
         rooms.append(room)
         world.addroom(room)
