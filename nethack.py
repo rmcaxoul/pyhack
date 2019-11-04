@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 import curses
+from time import sleep
+
 """
 Nethack Game
 """
@@ -51,8 +53,6 @@ class coridoor:
     """
     def __init__(self, room1, room2, plateau):
         if room1.xleft > room2.xleft: room1, room2 = room2, room1
-        print(room1)
-        print(room2)
         self.start = (room1.xleft + randint(0,room1.xright - room1.xleft),
         room1.ytop + randint(0,room1.ybottom - room1.ytop))
         self.finish = (room2.xleft + randint(0,room2.xright - room2.xleft),
@@ -63,7 +63,6 @@ class coridoor:
                         max(self.start[1], self.finish[1])]
         self.xlength = finalcoord[2] - finalcoord[0]
         self.ylength = finalcoord[3] - finalcoord[1]
-        print(finalcoord)
         #finalcoord = [Xstart, Ystart, Xend, Yend]
         for absc in range(finalcoord[0], finalcoord[2]):
             try:plateau[finalcoord[1]][absc] = 1
@@ -75,6 +74,14 @@ class coridoor:
             try:plateau[ordo][abcs] = 1
             except:pass
 
+class player:
+    """
+    defines the properties of the player
+    """
+    def __init__(self, rooms):
+        self.startingroom = rooms[randint(0,len(rooms) - 1)]
+        self.x = self.startingroom.xleft + 1
+        self.y = self.startingroom.ytop + 1
 
 def main(stdscr):
     """
@@ -93,12 +100,13 @@ def main(stdscr):
 
 
 
+
 stdsrc = curses.initscr()
 curses.noecho()
 curses.cbreak()
 stdsrc.keypad(True)
-begin_x = 20; begin_y = 7
-height = 5; width = 40
+begin_x = 0; begin_y = 0
+height = 23; width = 80
 win = curses.newwin(height, width, begin_y, begin_x)
 curses.wrapper(main)
 main(stdsrc)
