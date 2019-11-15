@@ -98,15 +98,12 @@ def main(stdscr):
         prevroom = room
     world.display(world.plateau)
 
-
-
-
 stdsrc = curses.initscr()
 curses.noecho()
 curses.cbreak()
 stdsrc.keypad(True)
 begin_x = 0; begin_y = 0
-height = 23; width = 80
+height, width = stdsrc.getmaxyx()
 win = curses.newwin(height, width, begin_y, begin_x)
 curses.wrapper(main)
 main(stdsrc)
