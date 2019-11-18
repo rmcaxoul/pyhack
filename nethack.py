@@ -25,11 +25,11 @@ class World:
                     self.plateau[i + room.ytop][j + room.xleft] = 1
                 except:
                     continue
-    def display(self, plateau):
+    def display(self, plateau, stdsrc):
         for i in range(self.ysize):
             for j in range(self.xsize):
-                if plateau[i][j]:print("#",end ='')
-                else: print(".", end ='')
+                if plateau[i][j]:stdsrc.addstr(i, j, "#")
+                else: stdsrc.addstr(i, j, ".")
             print()
 
 
@@ -74,7 +74,7 @@ class coridoor:
             try:plateau[ordo][abcs] = 1
             except:pass
 
-class player:
+class Player:
     """
     defines the properties of the player
     """
@@ -83,12 +83,14 @@ class player:
         self.x = self.startingroom.xleft + 1
         self.y = self.startingroom.ytop + 1
 
+
 def main(stdscr):
     """
     Main of program
     """
     world = World(80,23)
     rooms, coridoors = [], []
+    key = 0
     for _i_ in range(5):
         room = Room(world)
         rooms.append(room)
@@ -96,7 +98,24 @@ def main(stdscr):
         if _i_ >= 1:
             coridoors.append(coridoor(prevroom, room, world.plateau))
         prevroom = room
-    world.display(world.plateau)
+    player = Player(rooms)
+    world.display(world.plateau, stdscr)
+    stdscr.addstr(player.y, player.x, '@')
+    stdscr.refresh()
+    stdscr.getkey()
+    while key != ord('q'):
+        key = stdscr.getch()
+        if key == curses.KEY_DOWN:
+            player.y = player.y + 1
+        elif key == curses.KEY_UP:
+            player.y = player.y - 1
+        elif key == curses.KEY_RIGHT:
+            player.x = player.x + 1
+        elif key == curses.KEY_LEFT:
+            player.x = player.x - 1
+        stdscr.addstr(player.y, player.x, '@')
+        stdscr.refresh()
+
 
 stdsrc = curses.initscr()
 curses.noecho()
@@ -106,7 +125,6 @@ begin_x = 0; begin_y = 0
 height, width = stdsrc.getmaxyx()
 win = curses.newwin(height, width, begin_y, begin_x)
 curses.wrapper(main)
-main(stdsrc)
 curses.nocbreak()
 curses.echo()
 stdsrc.keypad(False)
