@@ -105,15 +105,17 @@ def main(stdscr):
     stdscr.getkey()
     while key != ord('q'):
         key = stdscr.getch()
-        if key == curses.KEY_DOWN:
+        prev = (player.y, player.x)
+        if key == curses.KEY_DOWN and world.plateau[player.y + 1][player.x]:
             player.y = player.y + 1
-        elif key == curses.KEY_UP:
+        elif key == curses.KEY_UP and world.plateau[player.y - 1][player.x]:
             player.y = player.y - 1
-        elif key == curses.KEY_RIGHT:
+        elif key == curses.KEY_RIGHT and world.plateau[player.y][player.x + 1]:
             player.x = player.x + 1
-        elif key == curses.KEY_LEFT:
+        elif key == curses.KEY_LEFT and world.plateau[player.y][player.x - 1]:
             player.x = player.x - 1
         stdscr.addstr(player.y, player.x, '@')
+        stdscr.addstr(prev[0],prev[1], '#')
         stdscr.refresh()
 
 
