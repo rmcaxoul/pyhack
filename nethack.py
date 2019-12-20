@@ -88,8 +88,10 @@ def main(stdscr):
     """
     Main of program
     """
-    world = World(80,23)
+    height, width = stdsrc.getmaxyx()
+    world = World(width - 1, height - 1)
     rooms, coridoors = [], []
+    curses.curs_set(0)
     key = 0
     for _i_ in range(5):
         room = Room(world)
